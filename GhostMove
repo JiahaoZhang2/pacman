@@ -1,0 +1,43 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class GhostMove : MonoBehaviour
+{
+    //Store all waypoints
+    public Transform[] WayPoints;
+    // ghost speed
+    public float speed = 0.2f;
+    //Which waypoint ghost is currently enroute to
+    private int index = 0;
+
+    private void FixedUpdate()
+    {
+      if (transform.position != WayPoints[index].position)
+      {
+          // Get the coordinates of the next move
+          Vector2 temp = Vector2.MoveTowards(transform.position,WayPoints[index].position,speed);
+          // Set object position by rigidbody
+          GetComponent<Rigidbody2D>().MovePosition(temp);
+
+      }
+      else
+      {
+          index = (index + 1) % WayPoints.Length;
+      }
+      // Get direction of movement
+      Vector2 dir = WayPoints[index].position - transform.position;
+      // Corresponding to the animation
+      GetComponent<Animator>().SetFloat("moveX",dir.x);
+      GetComponent<Animator>().SetFloat("moveY",dir.y);
+    }
+
+     private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.name=="Pacman")
+        {
+            Destroy(collision.gameObject);
+        }
+    }
+
+}
