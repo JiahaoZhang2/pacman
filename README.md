@@ -1,2 +1,2 @@
-# pacman_game
+# pacman
 3815assignment
